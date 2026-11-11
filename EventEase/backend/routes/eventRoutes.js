@@ -1,0 +1,11 @@
+const r = require('express').Router();
+const c = require('../controllers/eventController');
+const { protect, optionalAuth } = require('../middleware/authMiddleware');
+const role = require('../middleware/roleMiddleware');
+const { upload } = require('../utils/upload');
+r.get('/', c.getEvents);
+r.get('/:id', optionalAuth, c.getEvent);
+r.post('/', protect, role('organizer', 'admin'), upload.single('bannerImage'), c.createEvent);
+r.put('/:id', protect, role('organizer', 'admin'), upload.single('bannerImage'), c.updateEvent);
+r.delete('/:id', protect, role('organizer', 'admin'), c.deleteEvent);
+module.exports = r;

@@ -1,0 +1,11 @@
+const r = require('express').Router();
+const c = require('../controllers/registrationController');
+const { protect } = require('../middleware/authMiddleware');
+const role = require('../middleware/roleMiddleware');
+r.use(protect);
+r.post('/', c.register);
+r.get('/my', c.myRegistrations);
+r.get('/event/:eventId', role('organizer', 'admin'), c.eventRegistrations);
+r.get('/:id', c.getOne);
+r.delete('/:id', c.cancel);
+module.exports = r;

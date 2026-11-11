@@ -1,0 +1,12 @@
+const r = require('express').Router();
+const c = require('../controllers/userController');
+const o = require('../controllers/organizerController');
+const { protect } = require('../middleware/authMiddleware');
+const role = require('../middleware/roleMiddleware');
+const { upload } = require('../utils/upload');
+r.use(protect);
+r.get('/profile', c.getProfile);
+r.put('/profile', upload.single('profileImage'), c.updateProfile);
+r.get('/dashboard/attendee', o.attendeeDashboard);
+r.get('/dashboard/organizer', role('organizer', 'admin'), o.dashboard);
+module.exports = r;
